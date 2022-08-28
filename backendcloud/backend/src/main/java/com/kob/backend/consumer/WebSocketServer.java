@@ -58,7 +58,6 @@ public class WebSocketServer {
     @OnOpen
     public void onOpen(Session session, @PathParam("token") String token) throws IOException {
         this.session = session;
-        System.out.println("connected");
         Integer userId = JwtAuthentication.getUserId(token);
         this.user = userMapper.selectById(userId);
 
@@ -73,7 +72,6 @@ public class WebSocketServer {
     @OnClose
     public void onClose() {
         // 关闭链接
-        System.out.println("disconnected");
         if (this.user != null) {
             users.remove(this.user.getId());
         }
@@ -133,7 +131,6 @@ public class WebSocketServer {
     }
 
     private void startMatching(Integer botId) {
-        System.out.println("start matching!");
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
         data.add("user_id", this.user.getId().toString());
         data.add("rating", this.user.getRating().toString());
@@ -142,7 +139,6 @@ public class WebSocketServer {
     }
 
     private void stopMatching() {
-        System.out.println("stop-matching!");
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
         data.add("user_id", this.user.getId().toString());
         restTemplate.postForObject(removePlayerUrl, data, String.class);
@@ -161,7 +157,6 @@ public class WebSocketServer {
     @OnMessage
     public void onMessage(String message, Session session) {
         // 从Client接收消息
-        System.out.println("receive message!");
         JSONObject data = JSON.parseObject(message);
         String event = data.getString("event");
         if ("start-matching".equals(event)) {

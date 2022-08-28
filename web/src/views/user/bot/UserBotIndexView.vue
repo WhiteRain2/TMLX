@@ -66,8 +66,8 @@
                                     <td>{{ bot.createtime }}</td>
                                     <td>
                                         <button type="button" class="btn btn-secondary" style="margin-right: 10px;" data-bs-toggle="modal" :data-bs-target="'#update-bot-modal-'+bot.id">修改</button>
-                                        <button type="button" class="btn btn-danger" @click="remove_bot(bot)" style="margin-right: 10px;">删除</button>
-                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" :data-bs-target="'#test-bot-modal-'+bot.id">测试</button>
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" :data-bs-target="'#test-bot-modal-'+bot.id" style="margin-right: 10px;">测试</button>
+                                        <button type="button" class="btn btn-danger" @click="remove_bot(bot)">删除</button>
                                         <!-- Modal -->
                                         <div class="modal fade" :id="'update-bot-modal-'+bot.id" tabindex="-1">
                                             <div class="modal-dialog modal-xl">
@@ -112,8 +112,10 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body bot-test-body">
-                                                    <button type="button" class="btn btn-light btn-lg" @click="test_bot(bot, null)" style="margin-right: 10px;">亲自出马</button>
-                                                    <button type="button" class="btn btn-light btn-lg" @click="test_bot(bot, _bot)" v-for="_bot in bots" :key="_bot.id" style="margin-right: 10px;">{{ _bot.title }}</button>
+                                                    <button type="button" class="btn btn-light btn-lg" @click="test_bot(bot, null)" style="margin: 3px; width: 100%;">亲自出马</button>
+                                                    <div v-for="_bot in bots" :key="_bot.id">
+                                                        <button type="button" class="btn btn-light btn-lg" @click="test_bot(bot, _bot)" v-if="bot.id !== _bot.id" style="margin: 3px; width: 100%;">{{ _bot.title }}</button>
+                                                    </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">返回</button>
@@ -164,7 +166,7 @@ export default {
         });
         const refresh_bots = () => {
             $.ajax({
-                url: "http://172.16.0.3:3000/api/user/bot/getlist/",
+                url: "http://127.0.0.1:3000/api/user/bot/getlist/",
                 type: "GET",
                 headers: {
                     Authorization: "Bearer " + store.state.user.token
@@ -180,7 +182,7 @@ export default {
         const add_bot = () => {
             botadd.error_message = "";
             $.ajax({
-                url: "http://172.16.0.3:3000/api/user/bot/add/",
+                url: "http://127.0.0.1:3000/api/user/bot/add/",
                 type: "POST",
                 headers: {
                     Authorization: "Bearer " + store.state.user.token
@@ -208,7 +210,7 @@ export default {
         const update_bot = (bot) => {
             botadd.error_message = "";
             $.ajax({
-                url: "http://172.16.0.3:3000/api/user/bot/update/",
+                url: "http://127.0.0.1:3000/api/user/bot/update/",
                 type: "POST",
                 headers: {
                     Authorization: "Bearer " + store.state.user.token
@@ -233,7 +235,7 @@ export default {
 
         const remove_bot = (bot) => {
             $.ajax({
-                url: "http://172.16.0.3:3000/api/user/bot/remove/",
+                url: "http://127.0.0.1:3000/api/user/bot/remove/",
                 type: "POST",
                 headers: {
                     Authorization: "Bearer " + store.state.user.token

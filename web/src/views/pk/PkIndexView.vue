@@ -21,31 +21,29 @@ export default {
     setup() {
         console.log("setup");
         const store = useStore();
-        const socketUrl = `ws://172.16.0.3:3000/websocket/${store.state.user.token}`;
+        const socketUrl = `ws://127.0.0.1:3000/websocket/${store.state.user.token}`;
         store.commit("updateLoser", "none");
         store.commit("updateIsRecord", false);
 
         const sendTest = () => {
             const bot = store.state.pk.test_info.bot;
             const oppont = store.state.pk.test_info.oppont;
-            console.log(bot);
-            console.log(oppont);
             let oppontId = -1;
             if (oppont != null) {
                 oppontId = oppont.id;
             }
             const user_id = store.state.user.id;
             $.ajax({
-                url: "http://172.16.0.3:3000/pk/start/game/",
+                url: "http://127.0.0.1:3000/pk/start/game/",
                 type: "POST",
                 headers: {
                     Authorization: "Bearer " + store.state.user.token
                 },
                 data: {
                     a_id: user_id,
-                    a_bot_id: bot.id,
+                    a_bot_id: oppontId,
                     b_id: user_id,
-                    b_bot_id: oppontId
+                    b_bot_id: bot.id
                 },
                 success() {
                 }
@@ -77,11 +75,13 @@ export default {
                         username: data.opponent_username,
                         photo: data.opponent_photo
                     });
+                    console.log(data);
                     setTimeout(() => {
                         store.commit("updateStatus", "playing");                 
                     }, 2000);
                     store.commit("updateGame", data.game);
                 } else if (data.event === "move") {
+                    console.log("move: ", data);
                     const game = store.state.pk.gameObject;
                     const [snake0, snake1] = game.snakes;
                     snake0.set_direction(data.a_direction);

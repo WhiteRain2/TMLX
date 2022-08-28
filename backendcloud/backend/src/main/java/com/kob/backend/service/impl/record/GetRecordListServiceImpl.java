@@ -27,6 +27,7 @@ public class GetRecordListServiceImpl implements GetRecordListService {
     public JSONObject getList(Integer page) {
         IPage<Record> recordIPage = new Page<>(page, 10);
         QueryWrapper<Record> queryWrapper = new QueryWrapper<>();
+        queryWrapper.ge("LENGTH(a_steps)", 5);
         queryWrapper.orderByDesc("id");
         List<Record> records = recordMapper.selectPage(recordIPage, queryWrapper).getRecords();
         JSONObject resp = new JSONObject();
@@ -47,7 +48,7 @@ public class GetRecordListServiceImpl implements GetRecordListService {
             items.add(item);
         }
         resp.put("records", items);
-        resp.put("records_count", recordMapper.selectCount(null));
+        resp.put("records_count", recordMapper.selectCount(queryWrapper));
         return resp;
     }
 }

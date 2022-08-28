@@ -93,7 +93,8 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => { 
+  window.document.title = "King of Bots";
   if (to.meta.requestAuth && !store.state.user.is_login) {
     next({ name: "user_account_login" });
   }

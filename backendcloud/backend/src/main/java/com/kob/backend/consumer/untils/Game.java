@@ -137,7 +137,6 @@ public class Game extends Thread {
     }
 
     private void sendMove() {
-        System.out.println("send move!");
         lock.lock();
         try {
             JSONObject resp = new JSONObject();
@@ -184,6 +183,8 @@ public class Game extends Thread {
     }
 
     private void saveToDatabase() {
+        if (playerA.getId().equals(playerB.getId())) return;
+
         Integer ratingA = WebSocketServer.userMapper.selectById(playerA.getId()).getRating();
         Integer ratingB = WebSocketServer.userMapper.selectById(playerB.getId()).getRating();
 
@@ -266,7 +267,6 @@ public class Game extends Thread {
         }
         for (int i = 0; i < 1000; i++) {
             if (nextStep()) {
-                System.out.println(status);
                 judge();
                 if (status.equals("playing")) {
                     sendMove();
@@ -315,7 +315,7 @@ public class Game extends Thread {
 
     private String getInput(Player player) {
         Player me, you;
-        if (playerA.getId().equals(player.getId())) {
+        if (playerA.getId().equals(player.getId()) && playerA.getBotId().equals(player.getBotId())) {
             me = playerA;
             you = playerB;
         } else {
@@ -340,7 +340,6 @@ public class Game extends Thread {
         data.add("bot_code", player.getBotCode());
         data.add("input", getInput(player));
         WebSocketServer.restTemplate.postForObject(addBotUrl, data, String.class);
-        System.out.println("d: " + nextStepA + " " + nextStepB);
     }
 
     private boolean nextStep() {
@@ -351,7 +350,6 @@ public class Game extends Thread {
         }
         sendBotCode(playerA);
         sendBotCode(playerB);
-
         int countDown = 5;
         sendCountDown(countDown);
         for (int i = 0; i < 50; i++) {

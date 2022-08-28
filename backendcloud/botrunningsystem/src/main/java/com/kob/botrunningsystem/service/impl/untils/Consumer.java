@@ -134,7 +134,6 @@ public class Consumer extends Thread {
         data.add("user_id", bot.getUserId().toString());
         data.add("bot_id", bot.getBotId().toString());
         data.add("direction", direction.toString());
-        System.out.println(data);
         restTemplate.postForObject(receiveBotMoveUrl, data, String.class);
     }
 }
