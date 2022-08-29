@@ -14,13 +14,15 @@ export default {
     a_sy: 0,
     a_ready_info: false,
     a_bot_id: -1, //-1表示人玩
+    a_record: 0,
     b_id: 0,
     b_sx: 0,
     b_sy: 0,
     b_bot_id: -1,
     b_ready_info: false,
+    b_record: 0,
     gameObject: null,
-    loser: "none", //all/a/b
+    loser: "none", //all/A/B
     count_down: 0
   },
   getters: {
@@ -62,6 +64,10 @@ export default {
     updateReadyInfo(state, readyInfo) {
       state.a_ready_info = readyInfo.a_ready_info;
       state.b_ready_info = readyInfo.b_ready_info;
+    },
+    updateRecord(state, record) {
+      state.a_record = record.a_record;
+      state.b_record = record.b_record;
     }
   },
   actions: {

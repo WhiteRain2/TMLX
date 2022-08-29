@@ -75,13 +75,15 @@ export default {
                         username: data.opponent_username,
                         photo: data.opponent_photo
                     });
-                    console.log(data);
-                    setTimeout(() => {
-                        store.commit("updateStatus", "playing");                 
-                    }, 2000);
+                    if (store.state.pk.status !== "test") {
+                        setTimeout(() => {
+                            store.commit("updateStatus", "playing");                 
+                        }, 2000);
+                    } else {
+                        store.commit("updateStatus", "playing");
+                    }
                     store.commit("updateGame", data.game);
                 } else if (data.event === "move") {
-                    console.log("move: ", data);
                     const game = store.state.pk.gameObject;
                     const [snake0, snake1] = game.snakes;
                     snake0.set_direction(data.a_direction);
@@ -89,6 +91,10 @@ export default {
                 } else if (data.event === "result") {
                     const game = store.state.pk.gameObject;
                     const [snake0, snake1] = game.snakes;
+                    const record = {
+                        a_record: data.a_record,
+                        b_record: data.b_record
+                    }
                     if (data.loser === "all" || data.loser === "A") {
                         snake0.status = "die";
                     }
@@ -96,6 +102,7 @@ export default {
                         snake1.status = "die";
                     }
                     store.commit("updateLoser", data.loser);
+                    store.commit("updateRecord", record);
                 } else if (data.event === "count_down") {
                     const countDown = data.count_down;
                     store.commit("updateCountDown", countDown);

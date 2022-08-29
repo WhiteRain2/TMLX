@@ -130,9 +130,11 @@ public class Game extends Thread {
 
     private void sendResult() {
         JSONObject resp = new JSONObject();
+        saveToDatabase();
         resp.put("event", "result");
         resp.put("loser", loser);
-        saveToDatabase();
+        resp.put("a_record", WebSocketServer.userMapper.selectById(playerA.getId()).getRating());
+        resp.put("b_record", WebSocketServer.userMapper.selectById(playerB.getId()).getRating());
         sendAllMessage(resp.toJSONString());
     }
 
@@ -350,9 +352,9 @@ public class Game extends Thread {
         }
         sendBotCode(playerA);
         sendBotCode(playerB);
-        int countDown = 5;
+        int countDown = 10;
         sendCountDown(countDown);
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 100; i++) {
             try {
                 Thread.sleep(100);
                 if ((i+1) % 10 == 0) {

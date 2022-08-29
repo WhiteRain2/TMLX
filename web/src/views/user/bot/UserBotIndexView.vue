@@ -3,8 +3,12 @@
         <div class="row">
             <div class="col-3">
                 <div class="card" style="margin-top: 20px;">
+                    <img class="card-img-top" :src="$store.state.user.photo" alt="">
                     <div class="card-body">
-                        <img :src="$store.state.user.photo" alt="">
+                        <div class="card-body-rating-info">
+                            <div>当前积分: {{ rating }}</div>
+                        </div>
+                        <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 20px">更新头像</button>
                     </div>
                 </div>
             </div>
@@ -148,10 +152,33 @@ export default {
         VAceEditor
     },
     setup() {
+        const store = useStore();
+        let rating = ref();
+        const getInfo = () => {
+            $.ajax({
+                url: "http://127.0.0.1:3000/api/user/info/getinfo/",
+                type: "GET",
+                headers: {
+                    Authorization: "Bearer " + store.state.user.token
+                },
+                data: {
+                    user_id: store.state.user.id
+                },
+                success(resp) {
+                    if (resp.error_message === "success") {
+                       rating.value = resp.rating;
+                    }
+                    else {
+                        botadd.error_message = resp.error_message;
+                    }
+                }
+            });
+        }
+        getInfo();
+
         ace.config.set(
         "basePath", 
         "https://cdn.jsdelivr.net/npm/ace-builds@" + require('ace-builds').version + "/src-noconflict/")
-        const store = useStore();
         let bots = ref([]);
         const bot_content_init = 
 `public Integer nextMove(int[][] map, int meSx, int meSy, String meSteps, int youSx, int youSy, String youSteps) {
@@ -268,7 +295,8 @@ export default {
             update_bot,
             remove_bot,
             test_bot,
-            bot_content_init
+            bot_content_init,
+            rating
         }
     }
 }
@@ -277,5 +305,11 @@ export default {
 <style scoped>    
 div.error-message {
     color: red;
+}
+div.card-body-rating-info {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 500;
+    font-style: italic;
 }
 </style>

@@ -2,7 +2,7 @@
     <div class="game-info">
         <div class="row" style="margin-top: 5px">
             <div class="col-5">
-                <div class="a-ready-info read-info">
+                <div class="a-ready-info read-info" v-if="$store.state.pk.a_id !== $store.state.pk.b_id">
                     <span v-if="$store.state.pk.a_id===parseInt($store.state.user.id)
                     && $store.state.pk.a_ready_info">我方已就绪</span>
                     <span v-else-if="$store.state.pk.a_id!==parseInt($store.state.user.id)
@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="col-5">
-                <div class="b-ready-info read-info">
+                <div class="b-ready-info read-info" v-if="$store.state.pk.a_id !== $store.state.pk.b_id">
                     <div class="b-read-info-logo"></div>
                     <img src="@/assets/images/botlogo.png" alt="" v-if="parseInt($store.state.pk.b_bot_id)!==-1" class="bot-logo">
                     <img src="@/assets/images/melogo.png" alt="" v-if="$store.state.pk.b_id===parseInt($store.state.user.id)" class="me-logo">
