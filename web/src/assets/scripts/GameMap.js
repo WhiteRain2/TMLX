@@ -1,3 +1,4 @@
+import router from "@/router";
 import { GameObject } from "./GameObject";
 import { Snake } from "./Snake";
 import { Wall } from "./Wall";
@@ -40,7 +41,8 @@ export class GameMap extends GameObject {
             const b_steps = this.store.state.record.b_steps;
             const loser = this.store.state.record.record_loser;
             const [snake0, snake1] = this.snakes;
-            const interval_id =  setInterval(() => {
+            this.ctx.canvas.focus();
+            this.ctx.canvas.addEventListener("keydown", e => {
                 if (k >= a_steps.length - 1) {
                     if (loser === "all" || loser === "A") {
                         snake0.status = "die";
@@ -48,13 +50,20 @@ export class GameMap extends GameObject {
                     if (loser === "all" || loser === "B") {
                         snake1.status = "die";
                     }
-                    clearInterval(interval_id);
+                    if (e.key === 'q') {
+                        router.push({name: 'record_index'});
+                    }
                 } else {
-                    snake0.set_direction(parseInt(a_steps[k]));
-                    snake1.set_direction(parseInt(b_steps[k]));
+                    if (e.key === " ") {
+                        snake0.set_direction(parseInt(a_steps[k]));
+                        snake1.set_direction(parseInt(b_steps[k]));
+                        k ++;
+                    }
+                    if (e.key === 'q') {
+                        router.push({name: 'record_index'});
+                    }
                 }
-                k ++;
-            }, 300);
+            });
         } else {
             this.ctx.canvas.focus();
             this.ctx.canvas.addEventListener("keydown", e => {

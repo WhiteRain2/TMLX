@@ -11,7 +11,7 @@
         </div>
         <div class="score-info">
             <div class="score-info-cur">{{ info_cur }}</div>
-            <div class="score-info-total">{{ info_total }}</div>
+            <div class="score-info-total">当前总分: {{ info_total }}</div>
         </div>
         <div class="result-board-btn">
             <button @click="restart" type="button" class="btn btn-warning btn-lg">再来!</button>

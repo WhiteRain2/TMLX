@@ -1,5 +1,5 @@
 <template>
-    <div class="game-info">
+    <div class="game-info" v-if="!$store.state.record.is_record">
         <div class="row" style="margin-top: 5px">
             <div class="col-5">
                 <div class="a-ready-info read-info" v-if="$store.state.pk.a_id !== $store.state.pk.b_id">

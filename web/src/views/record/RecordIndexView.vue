@@ -3,8 +3,8 @@
         <table class="table table-hover" style="text-align: center">
             <thead>
                 <tr>
-                    <th>A</th>
-                    <th>B</th>
+                    <th>左下</th>
+                    <th>右上</th>
                     <th>对战结果</th>
                     <th>对战时间</th>
                     <th>操作</th>

@@ -8,7 +8,7 @@
                         <div class="card-body-rating-info">
                             <div>当前积分: {{ rating }}</div>
                         </div>
-                        <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 20px">更新头像</button>
+                        <button type="file" class="btn btn-primary" style="width: 100%; margin-top: 20px">更新头像</button>
                     </div>
                 </div>
             </div>
