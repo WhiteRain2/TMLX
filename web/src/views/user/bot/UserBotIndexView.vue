@@ -8,7 +8,12 @@
                         <div class="card-body-rating-info">
                             <div>当前积分: {{ rating }}</div>
                         </div>
-                        <button type="file" class="btn btn-primary" style="width: 100%; margin-top: 20px">更新头像</button>
+                        <label class="label-button-photo">
+                            <button type="file" class="btn btn-primary" style="width: 100%; margin-top: 20px">
+                                更新头像
+                            </button>
+                            <input ref="input" type="file" id="user_photo" class="user_photo">
+                        </label>
                     </div>
                 </div>
             </div>
@@ -141,7 +146,7 @@
 <script>
 import $ from 'jquery'
 import { useStore } from 'vuex'
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { Modal } from 'bootstrap/dist/js/bootstrap';
 import { VAceEditor } from 'vue3-ace-editor';
 import ace from 'ace-builds';
@@ -154,6 +159,7 @@ export default {
     setup() {
         const store = useStore();
         let rating = ref();
+        let input = ref(null);
         const getInfo = () => {
             $.ajax({
                 url: "http://127.0.0.1:3000/api/user/info/getinfo/",
@@ -288,6 +294,34 @@ export default {
             router.push({name: 'pk_index'});
         }
 
+        onMounted(() => {
+            input.value.onchange = function() {
+                let file = this.files[0];
+                let pettern = /^image/;
+                if (!pettern.test(file.type)) {
+                    alert("图片格式不正确");
+                    return;
+                }
+                let fileReader = new FileReader();
+                fileReader.readAsText(file);
+                fileReader.onload = function() {
+                    $.ajax({
+                    url: "http://127.0.0.1:3000/api/user/info/updateinfo/",
+                    type: "POST",
+                    headers: {
+                        Authorization: "Bearer " + store.state.user.token
+                    },
+                    data: {
+                        user_id: store.state.user.id,
+                        user_photo: file
+                    },
+                    success() {
+                    }
+                });
+                }
+            }
+        });
+
         return {
             bots,
             botadd,
@@ -296,7 +330,8 @@ export default {
             remove_bot,
             test_bot,
             bot_content_init,
-            rating
+            rating,
+            input
         }
     }
 }
@@ -311,5 +346,20 @@ div.card-body-rating-info {
     font-size: 20px;
     font-weight: 500;
     font-style: italic;
+}
+label.label-button-photo {
+    position: relative;
+    width: 100%;
+    display: inline-block;
+    overflow: hidden;
+}
+input.user_photo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
 }
 </style>

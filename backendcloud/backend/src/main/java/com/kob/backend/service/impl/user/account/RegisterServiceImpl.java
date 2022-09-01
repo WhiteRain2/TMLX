@@ -61,8 +61,18 @@ public class RegisterServiceImpl implements RegisterService {
             return map;
         }
         String encodedPassword = passwordEncoder.encode(password);
-        String photo = "https://cdn.acwing.com/media/user/profile/photo/161748_lg_ad3977ce8f.jpg";
-        User user = new User(null, username, encodedPassword, photo, 1500);
+        String[] photos = {
+                "https://cdn.acwing.com/media/user/profile/photo/161748_lg_ad3977ce8f.jpg",
+                "https://cdn.acwing.com/media/user/profile/photo/201616_lg_b55c96120f.jpg",
+                "https://cdn.acwing.com/media/user/profile/photo/182200_lg_0c2afd7eae.jpg",
+                "https://cdn.acwing.com/media/user/profile/photo/109194_lg_e9250e44f2.jpg",
+                "https://cdn.acwing.com/media/user/profile/photo/114619_lg_a75eadac0c.jpg",
+                "https://cdn.acwing.com/media/user/profile/photo/100872_lg_3282c91e26.webp",
+                "https://cdn.acwing.com/media/user/profile/photo/62329_lg_ff7781be86.webp",
+                "https://cdn.acwing.com/media/user/profile/photo/69613_lg_73ca0939b2.jpg"
+        };
+        int index=(int)(Math.random() * photos.length);
+        User user = new User(null, username, encodedPassword, photos[index], 1500);
         userMapper.insert(user);
 
         map.put("error_message", "success");
