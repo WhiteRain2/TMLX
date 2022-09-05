@@ -12,7 +12,7 @@
                             <button type="file" class="btn btn-primary" style="width: 100%; margin-top: 20px">
                                 更新头像
                             </button>
-                            <input ref="input" type="file" id="user_photo" class="user_photo">
+                            <input ref="input" multiple="multiple" type="file" id="user_photo" class="user_photo" name="user_photo_file">
                         </label>
                     </div>
                 </div>
@@ -302,23 +302,29 @@ export default {
                     alert("图片格式不正确");
                     return;
                 }
-                let fileReader = new FileReader();
-                fileReader.readAsText(file);
-                fileReader.onload = function() {
+                const formData = new FormData();
+                //formData.append("userId", store.state.user.id);
+                formData.append("photo", file);
+                console.log(file);
+                //let fileReader = new FileReader();
+                //fileReader.readAsText(file);
+               // fileReader.onload = function() {
                     $.ajax({
-                    url: "http://127.0.0.1:3000/api/user/info/updateinfo/",
-                    type: "POST",
-                    headers: {
-                        Authorization: "Bearer " + store.state.user.token
-                    },
-                    data: {
-                        user_id: store.state.user.id,
-                        user_photo: file
-                    },
-                    success() {
-                    }
-                });
-                }
+                        url: "http://127.0.0.1:3000/api/user/info/updateinfo/",
+                        type: "POST",
+                        headers: {
+                            Authorization: "Bearer " + store.state.user.token
+                        },
+                        data: formData,
+                        cache: false,
+                        async: false,
+                        dataType: 'json',      
+                        contentType : false,
+                        processData : false,
+                        success() {
+                        }
+                    });
+                //}
             }
         });
 
